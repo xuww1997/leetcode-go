@@ -1,5 +1,31 @@
 package main
 
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	// ascll 码
+	//i := 54
+	// 转换成 rune 字符类型，但是打印出来发现依然是数字样式
+	//var r rune = rune(i)
+	// 真正可以输出字符
+	//var str string = string(rune(i))
+	fmt.Println('1')
+}
+func reverse(x int) int {
+	var result int
+	for x != 0 {
+		result = 10*result + x%10
+		x = x / 10
+	}
+	if result > math.MaxInt32 || result < math.MinInt32 {
+		return 0
+	} else {
+		return result
+	}
+}
 func longestPalindrome(s string) string {
 	var maxLen int
 	var result string
