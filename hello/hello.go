@@ -8,13 +8,80 @@ import (
 	"strconv"
 )
 
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
 func main() {
-	//arr := []int{1,3,2}
-	//sort.Ints(arr)
-	fmt.Println(threeSumClosest([]int{1, 1, -1, -1, 3}, -1))
+	node3 := &ListNode{5, nil}
+	node2 := &ListNode{4, node3}
+	node1 := &ListNode{1, node2}
+
+	node6 := &ListNode{4, nil}
+	node5 := &ListNode{3, node6}
+	node4 := &ListNode{1, node5}
+
+	node8 := &ListNode{6, nil}
+	node7 := &ListNode{2, node8}
+	fmt.Println(mergeKLists([]*ListNode{node1, node4, node7}))
 	//fmt.Println()
 }
 
+func mergeKLists(lists []*ListNode) *ListNode {
+	head := &ListNode{0, nil}
+	tail := head
+	for true {
+		minLoc := 0
+		for i := 1; i < len(lists); i++ {
+			if lists[i].Val < lists[minLoc].Val {
+				minLoc = i
+			}
+		}
+		minNode := lists[minLoc]
+		tail.Next = minNode
+		lists[minLoc] = minNode.Next
+		if lists[minLoc] == nil {
+			lists = append(lists[:minLoc], lists[minLoc+1])
+		}
+		tail = tail.Next
+		if len(lists) == 0 {
+			break
+		}
+	}
+	return head.Next
+}
+func isValid(s string) bool {
+	arr := make([]byte, 0)
+	last := -1
+	pairs := map[byte]byte{
+		')': '(',
+		']': '[',
+		'}': '{',
+	}
+	add := func(c byte) {
+		arr = append(arr, c)
+		last++
+	}
+	removeLast := func() {
+		arr = arr[:last]
+		last--
+	}
+	for i := 0; i < len(s); i++ {
+		if s[i] == '(' || s[i] == '[' || s[i] == '{' {
+			add(s[i])
+		} else {
+			if last < 0 {
+				return false
+			}
+			if pairs[s[i]] != arr[last] {
+				return false
+			}
+			removeLast()
+		}
+	}
+	return last == -1
+}
 func threeSumClosest(nums []int, target int) int {
 	sort.Ints(nums)
 	result := math.MaxInt32
