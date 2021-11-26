@@ -14,20 +14,79 @@ type ListNode struct {
 }
 
 func main() {
-	node3 := &ListNode{5, nil}
-	node2 := &ListNode{4, node3}
-	node1 := &ListNode{1, node2}
-
-	node6 := &ListNode{4, nil}
-	node5 := &ListNode{3, node6}
-	node4 := &ListNode{1, node5}
-
-	node8 := &ListNode{6, nil}
-	node7 := &ListNode{2, node8}
-	fmt.Println(mergeKLists([]*ListNode{node1, node4, node7}))
-	//fmt.Println()
+	//u := "123"[0:1]
+	//f := "123"[1:2]
+	//var c byte
+	//var c uint8 = 'c'
+	//fmt.Printf("%T,%T",u,c)
+	//fmt.Println("123" + string(2))
+	fmt.Println(multiply("123", "456"))
+	//var x int = 12
+	//fmt.Println(string(x % 10))
+}
+func multiply(num1 string, num2 string) string {
+	if num1 == "0" || num2 == "0" {
+		return "0"
+	}
+	result := ""
+	len1 := len(num1)
+	len2 := len(num2)
+	arr := make([]int, len1+len2)
+	for i := len1 - 1; i >= 0; i-- {
+		var x int = int(num1[i] - '0')
+		for j := len2 - 1; j >= 0; j-- {
+			var y int = int(num2[j] - '0')
+			arr[i+j+1] += x * y
+		}
+	}
+	for i := len1 + len2 - 1; i > 0; i-- {
+		arr[i-1] += arr[i] / 10
+		arr[i] %= 10
+	}
+	i := 0
+	if arr[0] == 0 {
+		i = 1
+	}
+	for ; i < len1+len2; i++ {
+		result = result + strconv.Itoa(arr[i])
+	}
+	return result
 }
 
+func search(nums []int, target int) int {
+	if len(nums) == 0 {
+		return -1
+	}
+	if len(nums) == 1 {
+		if target == nums[0] {
+			return 0
+		} else {
+			return -1
+		}
+	}
+	left := 0
+	right := len(nums) - 1
+	for left <= right {
+		mid := (left + right) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[mid] >= nums[0] {
+			if target >= nums[left] && target < nums[mid] {
+				right = mid - 1
+			} else {
+				left = mid + 1
+			}
+		} else {
+			if target <= nums[right] && target > nums[mid] {
+				left = mid + 1
+			} else {
+				right = mid - 1
+			}
+		}
+	}
+	return -1
+}
 func mergeKLists(lists []*ListNode) *ListNode {
 	head := &ListNode{0, nil}
 	tail := head
