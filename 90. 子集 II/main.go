@@ -2,23 +2,11 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
-//func subsets(nums []int) [][]int {
-//	result := make([][]int,0)
-//	for mask := 0; mask < 1<<len(nums); mask++ {
-//		r := make([]int, 0)
-//		for i := 0; i < len(nums); i++ {
-//			if mask>>i&1 == 1 {
-//				r = append(r, nums[i])
-//			}
-//		}
-//		result = append(result, r)
-//	}
-//	return result
-//}
-
-func subsets(nums []int) [][]int {
+func subsetsWithDup(nums []int) [][]int {
+	sort.Ints(nums)
 	result := make([][]int, 0)
 	tmp := make([]int, 0)
 	var backtrack func(total int, begin int)
@@ -29,6 +17,9 @@ func subsets(nums []int) [][]int {
 			result = append(result, r)
 		} else {
 			for i := begin; i < len(nums); i++ {
+				if i > begin && nums[i] == nums[i-1] {
+					continue
+				}
 				tmp = append(tmp, nums[i])
 				backtrack(total, i+1)
 				tmp = tmp[:len(tmp)-1]
@@ -43,5 +34,5 @@ func subsets(nums []int) [][]int {
 }
 
 func main() {
-	fmt.Println(subsets([]int{1, 2, 3}))
+	fmt.Println(subsetsWithDup([]int{1, 2, 2}))
 }
